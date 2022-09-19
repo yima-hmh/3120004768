@@ -48,7 +48,8 @@ public class TxtIOUtils {
         int length = str.length();
         BufferedWriter bw=null;
         try{
-            bw=new BufferedWriter(new FileWriter(new File(txtPath)));
+            //这里append参数设为true
+            bw=new BufferedWriter(new FileWriter(new File(txtPath),true));
             bw.write(str,0,(length>3?4:length));
             bw.newLine();
             bw.flush();
