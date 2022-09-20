@@ -18,7 +18,8 @@ public class SimHashUtils {
         MessageDigest messageDigest = null;
         try {
             messageDigest = MessageDigest.getInstance("MD5");
-            return new BigInteger(1,messageDigest.digest(str.getBytes("UTF-8"))).toString(2);
+            return new BigInteger(1,messageDigest.digest(str.getBytes("UTF-8"))).
+                    toString(2);
         } catch (Exception e) {
             e.printStackTrace();
             return str;
@@ -43,33 +44,38 @@ public class SimHashUtils {
 
         //用数组表示特征向量,取128位,从0 1 2位开始表示从高位到低位
         int[] v = new int[128];
+
         // 1、分词（使用了外部依赖hankcs包提供的接口）
-        List<String> keywordList = HanLP.extractKeyword(str, str.length());//取出所有关键词
-        // hash
+        //取出所有关键词,获取一个包含所有keyword的集合
+        List<String> keywordList = HanLP.extractKeyword(str, str.length());
+        // 计算hash
         int size = keywordList.size();
         int i = 0;//以i做外层循环
         for(String keyword : keywordList){
-            // 2、获取hash值
-            String keywordHash = getHash(keyword);
-            if (keywordHash.length() < 128) {
-                // hash值可能少于128位，在低位以0补齐
-                int dif = 128 - keywordHash.length();
-                for (int j = 0; j < dif; j++) {
-                    keywordHash += "0";
-                }
+
+        // 2、获取hash值
+        String keywordHash = getHash(keyword);
+        if (keywordHash.length() < 128) {
+            // hash值可能少于128位，在低位以0补齐
+            int dif = 128 - keywordHash.length();
+            for (int j = 0; j < dif; j++) {
+                keywordHash += "0";
             }
-            // 3、加权、合并
-            for (int j = 0; j < v.length; j++) {
-                // 对keywordHash的每一位与'1'进行比较
-                if (keywordHash.charAt(j) == '1') {
-                    //权重分10级，由词频从高到低，取权重10~0
-                    v[j] += (10 - (i / (size / 10)));
-                } else {
-                    v[j] -= (10 - (i / (size / 10)));
-                }
-            }
-            i++;
         }
+
+        // 3、加权、合并
+        for (int j = 0; j < v.length; j++) {
+            // 对keywordHash的每一位与'1'进行比较
+            if (keywordHash.charAt(j) == '1') {
+                //权重分10级，由词频从高到低，取权重10~0
+                v[j] += (10 - (i / (size / 10)));
+            } else {
+                v[j] -= (10 - (i / (size / 10)));
+            }
+        }
+        i++;
+        }
+
         // 4、降维
         StringBuilder simHash = new StringBuilder();// 储存返回的simHash值
         for (int j = 0; j < v.length; j++) {

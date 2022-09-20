@@ -22,8 +22,8 @@ public class HammingUtilsTest {
 
     @Test
     public void getSimilarityTest() {
-        String str0 = TxtIOUtils.readTxt("D:/test/orig.txt");
-        String str1 = TxtIOUtils.readTxt("D:/test/orig_0.8_add.txt");
+        String str0 = TxtIOUtils.readTxt("C:\\Users\\yima\\Desktop\\check\\orig.txt");
+        String str1 = TxtIOUtils.readTxt("C:\\Users\\yima\\Desktop\\check\\orig_0.8_add.txt");
         int distance = HammingUtils.getHammingDistance(SimHashUtils.getSimHash(str0), SimHashUtils.getSimHash(str1));
         double similarity = HammingUtils.getSimilarity(SimHashUtils.getSimHash(str0), SimHashUtils.getSimHash(str1));
         System.out.println("str0和str1的汉明距离: " + distance);

@@ -20,7 +20,6 @@ public class MainPaperCheck {
         //把相似度写入最后的结果文件中
         TxtIOUtils.writeTxt(similarity,resultFileName);
         System.out.println("结果已经输出至指定文件夹中");
-        //退出程序
-        System.exit(0);
+//        System.exit(0);
     }
 }
